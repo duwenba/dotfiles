@@ -10,14 +10,14 @@
 ├── README.md                  # ← 你正在读的（路径 docs/，chezmoi 不部署）
 ├── dot_bashrc
 ├── dot_bash_profile
-├── dot_zshrc
+├── dot_zshrc.tmpl             # 模板化：cachyos-zsh-config 包存在才 source
 ├── dot_zshrc.d/                # 整个 zsh 配置目录
 ├── dot_gitconfig.tmpl          # 用 .email / .name 模板变量
 ├── dot_config/
 │   ├── alacritty/alacritty.toml
 │   ├── bottom/bottom.toml
 │   ├── btop/btop.conf
-│   ├── fish/config.fish
+│   ├── fish/config.fish.tmpl   # 模板化：cachyos-fish-config 包存在才 source
 │   ├── gh/private_config.yml   # 原文件 0600，chezmoi 自动加 private_ 前缀
 │   ├── helix/config.toml
 │   ├── hypr/core/*.lua         # 9 个 portable 文件（不含 monitors.lua）
@@ -142,6 +142,41 @@ chezmoi apply --data email=other@example.com
 # 或
 CHEZMOI_DATA_EMAIL=other@example.com chezmoi apply
 ```
+
+## 处理发行版特定包
+
+如果某个配置文件 `source` 了发行版专属的脚本（`/usr/share/<distro>-xxx-config/...`），
+直接放进 chezmoi 会在别的发行版上部署失败。用 `stat` 模板函数做部署时条件渲染：
+
+```zsh
+{{ if stat "/usr/share/cachyos-zsh-config/cachyos-config.zsh" -}}
+source /usr/share/cachyos-zsh-config/cachyos-config.zsh
+{{ end }}
+```
+
+原理：`chezmoi apply` 时检查 `/usr/share/...` 是否存在，存在则渲染 `source` 行，否则整块跳过。
+这样：
+
+- 当前机器装了包 → 渲染正常
+- 以后删了包 → 下次 `chezmoi apply` 自动移除 `source` 行
+- 换到别的发行版 → 该路径不存在，整块不渲染，不报错
+
+可用的条件模板函数（[chezmoi docs](https://chezmoi.io/docs/reference/templates/special-functions/)）：
+
+| 函数 | 用途 |
+|---|---|
+| `stat path` | 文件/目录是否存在 |
+| `lookPath name` | 可执行文件是否在 `PATH` 中 |
+| `eq .chezmoi.os.id "cachyos"` | 按 OS ID 判断 |
+| `eq .chezmoi.hostname "xxx"` | 按主机名判断 |
+
+trim 标记注意点：
+
+- `{{- ... }}` 去掉左侧空白
+- `{{ ... -}}` 去掉右侧空白
+- `{{ end }}` 后面的换行/空行会被当成"条件为真时的输出"的一部分
+
+调试时用 `chezmoi cat <target>` 看渲染结果，或者 `chezmoi diff` 对比差异。
 
 ## 备份 / 回滚
 
