@@ -1,0 +1,10 @@
+#:schema https://docs.jj-vcs.dev/latest/config-schema.json
+
+[ui]
+default-command = "status"
+editor = "helix"
+merge-editor = ":builtin"
+
+[user]
+email = {{ .email | quote }}
+name = {{ .name | quote }}

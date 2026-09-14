@@ -1,0 +1,30 @@
+[mgr]
+ratio = [1,3,3]
+sort_by = "natural"
+sort_dir_first = true
+show_hidden = false
+
+[preview]
+
+warp = "yes"
+
+[opener]
+edit = [
+  {desc = 'Helix', run = "hx %s", block = true, for = "windows" },
+  {desc = 'Zed', run = "zed %s", orphan = true, for = "windows" },  
+  {desc = 'Helix', run = "helix %s", block = true, for = "unix" },
+  {desc = 'Zed', run = "zeditor %s", orphan = true, for = "unix" },  
+  {desc = 'Micro', run = "micro %s", block = true, for = "unix" },
+]
+
+markdown = [
+	{desc = "typora", run = "flatpak run io.typora.Typora %s" , orphan = true ,for = "linux"}
+]
+
+# play = [
+#   {desc = 'MPV', run = 'C:\Users\22753\Downloads\mpv-lazy\mpv.exe %s', orphan = true, for = "windows" },
+# ]
+[open]
+prepend_rules = [
+	{ url = "*.md", use = ["markdown", "edit"]},
+]

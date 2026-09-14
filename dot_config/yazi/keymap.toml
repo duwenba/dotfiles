@@ -1,0 +1,9 @@
+# 移动存储管理：Yazi 内置 mount 插件（基于 udisksctl, 方案A）
+#
+# 按  M  打开设备选择器，其内部快捷键：
+#   m = 挂载所选分区        u = 卸载所选分区
+#   e = 弹出(安全移除)该盘  Enter/l = 进入该挂载点
+#   j/k 或 上/下 = 移动光标  q/Esc = 退出
+[[mgr.prepend_keymap]]
+on = "M"
+run = "plugin mount"

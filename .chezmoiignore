@@ -1,0 +1,5 @@
+# chezmoi — files NOT to deploy to $HOME
+# Pattern syntax: https://pkg.go.dev/path/filepath#Match
+docs
+docs/**
+README.md

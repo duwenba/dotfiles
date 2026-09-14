@@ -1,0 +1,12 @@
+source /usr/share/cachyos-fish-config/cachyos-config.fish
+
+# 本机回环地址不走代理（FreeRDP/winboat 等本地服务需要）
+set -gx no_proxy 127.0.0.1,localhost,::1
+set -gx NO_PROXY 127.0.0.1,localhost,::1
+
+# overwrite greeting
+# potentially disabling fastfetch
+function fish_greeting
+    # smth smth
+end
+zoxide init fish | source

@@ -1,0 +1,8 @@
+theme = "zed_onedark"
+[editor]
+line-number = "relative"
+bufferline = "multiple"
+cursor-shape.insert = "bar"
+
+[editor.soft-wrap]
+enable = true
