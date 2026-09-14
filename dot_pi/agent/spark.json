@@ -1,0 +1,29 @@
+{
+  "editor": {
+    "spinner": "dots",
+    "thinkingLevelIndicator": "model"
+  },
+  "footer": {
+    "statusPosition": "inline"
+  },
+  "presets": {
+    "ark-code": {
+      "provider": "agent-plan",
+      "model": "ark-code-latest",
+      "thinkingLevel": "high"
+    },
+    "ark-fast": {
+      "provider": "agent-plan",
+      "model": "ark-code-latest",
+      "thinkingLevel": "off"
+    }
+  },
+  "recap": {
+    "idle": "5m",
+    "thinkingLevel": "off"
+  },
+  "title": {
+    "thinkingLevel": "off"
+  },
+  "write": {}
+}

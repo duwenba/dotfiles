@@ -13,6 +13,7 @@
 ├── dot_zshrc.tmpl             # 模板化：cachyos-zsh-config 包存在才 source
 ├── dot_zshrc.d/                # 整个 zsh 配置目录
 ├── dot_gitconfig.tmpl          # 用 .email / .name 模板变量
+├── dot_pi/agent/               # pi coding agent（见「pi agent」一节）
 ├── dot_config/
 │   ├── alacritty/alacritty.toml
 │   ├── bottom/bottom.toml
@@ -79,6 +80,12 @@ chezmoi data --bash              # 同上，shell export 格式
 ### 应用运行时数据
 - `jj/repos/`、`gh/hosts.yml`
 
+### pi coding agent（`~/.pi/agent/`）
+- `sessions/`（49M 会话历史）、`npm/`（33M node_modules）、`tmp/`、`talk.db*`
+- `models-store.json`（程序生成的模型缓存）、`trust.json`（含本机路径 `/mnt/ntfs/...`）
+- `extensions/`、`themes/`（当前为空）、`extension-settings/schemas/`（扩展包自动生成）
+- ⚠️ `auth.json`、`models.json` 含**明文 API key**：不直接纳入，改为模板化（见「pi agent」一节）
+
 ### Hyprland 机器特异项
 - `hypr/hyprland.lua`（CachyOS 发行版管理）
 - `hypr/hl.meta.lua`（自动生成）
@@ -100,6 +107,46 @@ chezmoi add ~/.config/kitty/kitty.conf
 chezmoi edit ~/.config/kitty/kitty.conf
 # ↑ 这会打开 dot_config/kitty/kitty.conf，可改成 *.tmpl 并用 {{ .var }}
 ```
+
+## pi agent（`~/.pi`）的托管方式
+
+```
+~/.pi/agent/   →   dot_pi/agent/
+```
+
+**纳入的（手写意图）**：`settings.json`、`open-tui.json`、`spark.json`、
+`extension-settings/pi-ui-tweaks.json`、`skills/{github-cli,linux-use}/SKILL.md`。
+
+**模板化的（机密）**：
+
+| 目标 | 源 | 模板变量 |
+|---|---|---|
+| `~/.pi/agent/models.json` | `dot_pi/agent/private_models.json.tmpl` | `{{ .pi_ark_api_key | quote }}` |
+| `~/.pi/agent/auth.json` | `dot_pi/agent/private_auth.json.tmpl` | `{{ .pi_deepseek_api_key | quote }}` |
+
+明文 key 只存在于 `~/.config/chezmoi/chezmoi.toml` 的 `[data]`（权限 0600，**不在 git 仓库里**），
+源仓库内不含任何明文 key。两个目标文件原本是 0644/0755（同目录其他配置也是 0644 却带执行位），
+已收敛为 0600，并由 `private_` 前缀兜底。
+
+**轮换 key**：
+
+```bash
+hx ~/.config/chezmoi/chezmoi.toml        # 改 [data] pi_ark_api_key / pi_deepseek_api_key
+chezmoi apply                            # 重新渲染两个文件
+diff <(chezmoi cat ~/.pi/agent/models.json) ~/.pi/agent/models.json   # 应为空
+```
+
+**新机器**（key 不在仓库里，必须自备）：
+
+```bash
+chezmoi init git@github.com:USER/dotfiles.git
+chezmoi apply --dry-run --override-data '{"pi_ark_api_key":"...","pi_deepseek_api_key":"..."}'
+chezmoi apply           --override-data '{"pi_ark_api_key":"...","pi_deepseek_api_key":"..."}'
+# 或先把 key 写进 ~/.config/chezmoi/chezmoi.toml 的 [data] 再 apply
+```
+
+**为什么 `chezmoi add --recursive ~/.pi` 是错的**：会带进 49M sessions、33M node_modules、
+SQLite 运行时库和两份明文 key。这个目录"程序生成的状态"远多于"手写的意图"，只能逐文件 add。
 
 ## 跨机器同步
 
@@ -135,13 +182,19 @@ email = {{ .email | quote }}
 name = {{ .name | quote }}
 ```
 
-覆盖方式：
+覆盖方式（v2.72.1 实测）：
 
 ```bash
-chezmoi apply --data email=other@example.com
-# 或
-CHEZMOI_DATA_EMAIL=other@example.com chezmoi apply
+# ✅ 可用：JSON 覆盖，可只覆盖部分 key
+chezmoi cat               --override-data '{"email":"other@example.com"}' ~/.gitconfig
+chezmoi apply             --override-data '{"email":"other@example.com"}'
+chezmoi apply --override-data-file ~/.config/chezmoi/override.json
+
+# ❌ 不存在 / 无效：chezmoi 没有 --data flag；
+#    CHEZMOI_DATA_<KEY> 环境变量也不会覆盖 [data]（实测 chezmoi data 值不变）
 ```
+
+> `--override-data` 是**部分覆盖**：没提供的 key 仍取 `chezmoi.toml` 的值。
 
 ## 处理发行版特定包
 
