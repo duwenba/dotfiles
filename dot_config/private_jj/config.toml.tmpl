@@ -3,7 +3,12 @@
 [ui]
 default-command = "status"
 editor = "helix"
-merge-editor = ":builtin"
+diff-editor = "oyui"
+diff-instructions = false
+
+[merge-tools.oyui]
+program = "oyui"
+edit-args = ["diff", "$left", "$right"]
 
 [user]
 email = {{ .email | quote }}
