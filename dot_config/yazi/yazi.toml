@@ -21,9 +21,6 @@ markdown = [
 	{desc = "typora", run = "flatpak run io.typora.Typora %s" , orphan = true ,for = "linux"}
 ]
 
-# play = [
-#   {desc = 'MPV', run = 'C:\Users\22753\Downloads\mpv-lazy\mpv.exe %s', orphan = true, for = "windows" },
-# ]
 [open]
 prepend_rules = [
 	{ url = "*.md", use = ["markdown", "edit"]},
