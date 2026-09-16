@@ -11,6 +11,7 @@ hl.bind(mainMod .. " + Q",           hl.dsp.window.close(),                     
 hl.bind(mainMod .. " + ALT + Space", hl.dsp.window.float({ action = "toggle" }),   { description = "toggle float" })
 hl.bind(mainMod .. " + D",           hl.dsp.window.fullscreen({ mode = 1 }),       { description = "toggle fullscreen (maximize)" })
 hl.bind(mainMod .. " + F",           hl.dsp.window.fullscreen(),                   { description = "toggle fullscreen" })
+hl.bind("F11",                       hl.dsp.window.fullscreen_state({ internal=0, client=2}),{ description = "toggle fullscreen" })
 hl.bind("SUPER + p",                 hl.dsp.window.pin(),                          { description = "toggle pinned" })
 hl.bind(mainMod .. " + J",           hl.dsp.layout("togglesplit"),                 { description = "toggle split layout" })
 hl.bind(mainMod .. " + Left",        hl.dsp.focus({ direction = "left" }),         { description = "focus left" })
@@ -94,8 +95,8 @@ end
 --     local key = i % 10
 --     hl.bind(mainMod .. " + " .. key, hl.dsp.focus({ workspace = "m~" .. i }), { description = "focus relative workspace " .. i })
 -- end
-hl.bind(mainMod .. " + CONTROL + Right",       hl.dsp.focus({ workspace = "m+1" }),     { description = "focus next workspace" })
-hl.bind(mainMod .. " + CONTROL + Left",        hl.dsp.focus({ workspace = "m-1" }),     { description = "focus prev workspace" })
+hl.bind(mainMod .. " + CONTROL + Right",       hl.dsp.focus({ workspace = "+1" }),     { description = "focus next workspace" })
+hl.bind(mainMod .. " + CONTROL + Left",        hl.dsp.focus({ workspace = "-1" }),     { description = "focus prev workspace" })
 hl.bind(mainMod .. " + CONTROL + Down",        hl.dsp.focus({ workspace = "emptym" }),  { description = "focus empty workspace" })
 hl.bind(mainMod .. " + mouse_down",           hl.dsp.focus({ workspace = "m-1" }),      { description = "focus prev workspace" })
 hl.bind(mainMod .. " + mouse_up",             hl.dsp.focus({ workspace = "m+1" }),      { description = "focus next workspace" })
