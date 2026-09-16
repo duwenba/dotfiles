@@ -10,15 +10,19 @@ warp = "yes"
 
 [opener]
 edit = [
-  {desc = 'Helix', run = "hx %s", block = true, for = "windows" },
-  {desc = 'Zed', run = "zed %s", orphan = true, for = "windows" },  
-  {desc = 'Helix', run = "helix %s", block = true, for = "unix" },
-  {desc = 'Zed', run = "zeditor %s", orphan = true, for = "unix" },  
-  {desc = 'Micro', run = "micro %s", block = true, for = "unix" },
+  {desc = 'Helix', run = "hx %s",      block  = true,  for = "windows" },
+  {desc = 'Zed',   run = "zed %s",     orphan = true,  for = "windows" },
+  {desc = 'Helix', run = "helix %s",   block  = true,  for = "unix" },
+  {desc = 'Zed',   run = "zeditor %s", orphan = true,  for = "unix" },
+  {desc = 'Micro', run = "micro %s",   block  = true,  for = "unix" },
 ]
 
 markdown = [
-	{desc = "typora", run = "flatpak run io.typora.Typora %s" , orphan = true ,for = "linux"}
+	{desc = "typora", run = "flatpak run io.typora.Typora %s" , orphan = true ,for = "unix"}
+]
+
+chezmoi = [
+	{desc="chezmoi edit", run = 'chezmoi edit %s', block = true, for = "unix"}
 ]
 
 [open]
