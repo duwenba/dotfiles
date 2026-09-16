@@ -28,5 +28,5 @@ chezmoi = [
 [open]
 prepend_rules = [
 	{ url = "*.md",               use = ["markdown", "edit"]},
-	{ url = '/home/*/.config/**', use = ["chezmoi"]}
+	{ url = '/home/*/.config/**', use = ["edit","chezmoi"]}
 ]
