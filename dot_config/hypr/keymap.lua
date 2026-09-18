@@ -11,7 +11,7 @@ hl.bind(mainMod .. " + Q",           hl.dsp.window.close(),                     
 hl.bind(mainMod .. " + ALT + Space", hl.dsp.window.float({ action = "toggle" }),   { description = "toggle float" })
 hl.bind(mainMod .. " + D",           hl.dsp.window.fullscreen({ mode = 1 }),       { description = "toggle fullscreen (maximize)" })
 hl.bind(mainMod .. " + F",           hl.dsp.window.fullscreen(),                   { description = "toggle fullscreen" })
-hl.bind("F11",                       hl.dsp.window.fullscreen_state({ internal=0, client=2}),{ description = "toggle fullscreen" })
+hl.bind("F11", hl.dsp.window.fullscreen_state({ internal=0, client = 2, action = "toggle" }),{ description = "fake fullscreen" })
 hl.bind("SUPER + p",                 hl.dsp.window.pin(),                          { description = "toggle pinned" })
 hl.bind(mainMod .. " + J",           hl.dsp.layout("togglesplit"),                 { description = "toggle split layout" })
 hl.bind(mainMod .. " + Left",        hl.dsp.focus({ direction = "left" }),         { description = "focus left" })
