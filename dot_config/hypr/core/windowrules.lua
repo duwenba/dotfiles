@@ -66,7 +66,7 @@ hl.window_rule({
         "max(20, min(cursor_y - 50, monitor_h - window_h + 20))" -- Y axis clamping
     },
 })
-
+hl.window_rule({ match = { class = "^(.*\\bobsidian\\b.*)$" }, float = true })
 -- Opacity Overrides
 local terminals = "^(kitty|ghostty|[Kk]onsole|Alacritty|gnome-terminal|xfce[0-9]?-terminal)$"
 
