@@ -115,8 +115,12 @@ hl.window_rule({
     no_focus = true,
 })
 
--- WeChat
-local wechatMatches = { { class = "^wechat$" }, { title = "^微信$" } }
+-- WeChat And Other XWayland Apps
+local wechatMatches = {
+    { class = "^(Xdg-desktop-portal-gtk)$" },
+    { xwayland = true },
+}
+-- make them float
 for _, match in ipairs(wechatMatches) do
     hl.window_rule({
         match = match,

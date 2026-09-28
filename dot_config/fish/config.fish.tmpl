@@ -1,9 +1,6 @@
 {{ if stat "/usr/share/cachyos-fish-config/cachyos-config.fish" -}}
 source /usr/share/cachyos-fish-config/cachyos-config.fish
 {{ end }}
-# 本机回环地址不走代理（FreeRDP/winboat 等本地服务需要）
-set -gx no_proxy 127.0.0.1,localhost,::1
-set -gx NO_PROXY 127.0.0.1,localhost,::1
 
 # overwrite greeting
 # potentially disabling fastfetch
@@ -11,3 +8,6 @@ function fish_greeting
     # smth smth
 end
 zoxide init fish | source
+
+# Clash 代理：新终端自动检测端口在线才启用（见 functions/proxy.fish）
+proxy auto
