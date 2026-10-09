@@ -1,0 +1,30 @@
+// ────────────────────────────────────────────────────────────────────
+// niri 模块：输入设备  (对应 Hyprland core/inputs.lua)
+// ────────────────────────────────────────────────────────────────────
+input {
+    keyboard {
+        // Hyprland: input:numlock_by_default = true
+        numlock
+        xkb {
+            // 留空则沿用 systemd-localed / localectl 的键盘布局
+        }
+    }
+
+    touchpad {
+        tap
+        natural-scroll           // Hyprland: natural_scroll = true
+        accel-profile "flat"     // Hyprland: accel_profile = "flat"
+        scroll-factor 0.4        // Hyprland: scroll_factor = 0.4
+        // 不写 dwt = 关闭“打字时禁用触摸板”
+        // Hyprland: disable_while_typing = false
+    }
+
+    mouse {
+        accel-profile "flat"
+    }
+
+    // 焦点跟随鼠标：指针移入窗口/输出即自动聚焦
+    // 若不想因聚焦屏幕外的窗口而滚动视图，可改为：
+    //   focus-follows-mouse max-scroll-amount="0%"
+    focus-follows-mouse
+}

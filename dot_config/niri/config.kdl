@@ -6,6 +6,11 @@
 // 校验   : niri validate
 // 热重载 : niri msg action 后，改动保存后 niri 会自动重载配置
 // 快捷键 : niri 的 "Mod" 在 TTY 会话下等于 Super
+//
+// 本文件仅保留全局选项与 include 入口；其余配置按模块拆分到 core/ 下，
+// 与 Hyprland 的 core/ 模块一一对应。
+// 注意：include 是「位置相关」的，靠后加载的会覆盖靠前的同名设置，
+//       详见 https://niri-wm.github.io/niri/Configuration:-Include
 // ════════════════════════════════════════════════════════════════════
 
 // ────────────────────────────────────────────────────────────────────
@@ -16,267 +21,19 @@
 // 副作用：边缘悬停 resize 手柄消失，改用 Mod+右键拖拽调整大小。
 prefer-no-csd
 
-// ────────────────────────────────────────────────────────────────────
-// 输入设备  (对应 Hyprland core/inputs.lua)
-// ────────────────────────────────────────────────────────────────────
-input {
-    keyboard {
-        // Hyprland: input:numlock_by_default = true
-        numlock
-        xkb {
-            // 留空则沿用 systemd-localed / localectl 的键盘布局
-        }
-    }
-
-    touchpad {
-        tap
-        natural-scroll           // Hyprland: natural_scroll = true
-        accel-profile "flat"     // Hyprland: accel_profile = "flat"
-        scroll-factor 0.4        // Hyprland: scroll_factor = 0.4
-        // 不写 dwt = 关闭“打字时禁用触摸板”
-        // Hyprland: disable_while_typing = false
-    }
-
-    mouse {
-        accel-profile "flat"
-    }
-}
-
-// ────────────────────────────────────────────────────────────────────
-// 显示器  (对应 Hyprland core/monitors.lua)
-// ────────────────────────────────────────────────────────────────────
-output "eDP-1" {
-    mode "1920x1080@60"
-    scale 1.2
-    position x=0 y=0
-}
-
-// ────────────────────────────────────────────────────────────────────
-// 布局与外观  (对应 Hyprland core/decorations.lua + core/colors.lua)
-// ────────────────────────────────────────────────────────────────────
-layout {
-    // Hyprland: gaps_in 1 / gaps_out 2；niri 只有单一 gaps，取外间距
-    gaps 2
-    center-focused-column "never"
-
-    preset-column-widths {
-        proportion 0.33333
-        proportion 0.5
-        proportion 0.66667
-    }
-    // default-column-width { proportion 0.5; }
-
-    // 用 border 还原 Hyprland 的 2px 边框（active 渐变 / inactive 灰）
-    focus-ring { off; }
-    border {
-        width 2
-        // Hyprland: CACHYLGREEN → CACHYDGREEN, 45°，inactive CACHYGRAY
-        active-gradient from="#82dccc" to="#007d6f" angle=45
-        inactive-color "#798bb2"
-        urgent-color "#ff0000"
-    }
-
-    // Hyprland: shadow = false
-    shadow { off; }
-}
-
-// layer rules
-layer-rule {
-    match layer="top"
-    match layer="overlay"
-
-    background-effect {
-        xray false
-    }
-}
-
-// 全局 2px 圆角，对应 Hyprland decoration:rounding = 2
-window-rule {
-    geometry-corner-radius 2
-    clip-to-geometry true
-}
-
-// 浮动窗口规则  (对应 Hyprland core/windowrules.lua 相关条目)
-window-rule {
-    match app-id=r#"^(gnome-calculator|org\.gnome\.Calculator)$"#
-    open-floating true
-    default-column-width { proportion 0.25; }
-}
-window-rule {
-    match app-id=r#"^(firefox|zen)$"# title="^Picture-in-Picture$"
-    open-floating true
-}
-window-rule {
-    match app-id=r#"^(dev\.)?(noctalia\.Noctalia(\.Settings)?)$"#
-    open-floating true
-    default-column-width { proportion 0.70; }
-    default-window-height { proportion 0.70; }
-}
-// 常用工具窗口浮动
-window-rule {
-    match app-id=r#"^(org\.pulseaudio\.pavucontrol|blueman-manager|nm-applet|nm-connection-editor|kvantummanager|qt[56]ct|nwg-look)$"#
-    open-floating true
-}
-
-// ────────────────────────────────────────────────────────────────────
-// 环境变量
-// 原 Hyprland 走 uwsm(env)；niri-session 下由 niri 注入到子进程
-// 对应 ~/.config/uwsm/env 与 Hyprland core/environment.lua
-// ────────────────────────────────────────────────────────────────────
-environment {
-    BROWSER "zen-browser"
-    QT_QPA_PLATFORM "wayland;xcb"
-    QT_QPA_PLATFORMTHEME "qt6ct"
-    ELECTRON_OZONE_PLATFORM_HINT "auto"
-    XCURSOR_THEME "Bibata-Modern-Ice"
-    XCURSOR_SIZE "24"
-
-    // fcitx5 中文输入法（fcitx5 自启动由 org.fcitx.Fcitx5.desktop 提供）
-    QT_IM_MODULE "fcitx"
-    XMODIFIERS "@im=fcitx"
-    SDL_IM_MODULE "fcitx"
-    INPUT_METHOD "fcitx"
-}
-
-// ────────────────────────────────────────────────────────────────────
-// 自启动  (对应各 shell 的 autostart.lua)
-// ────────────────────────────────────────────────────────────────────
-// Noctalia v5 桌面 shell（原生支持 niri，自带 polkit agent）
-spawn-at-startup "noctalia"
-// CachyOS 焦点窗口 cgroup 加速
-spawn-at-startup "niri-focused-booster"
-// 允许 root 访问 XWayland（原 Hyprland autostart）
-spawn-sh-at-startup "sleep 1; xhost +SI:localuser:root"
-
 // 启动时不再弹出 niri 的“重要快捷键”浮层（快捷键可用 Mod+Shift+Slash 查看）
 hotkey-overlay {
     skip-at-startup
 }
 
 // ────────────────────────────────────────────────────────────────────
-// 快捷键  (对应 Hyprland keymap.lua)
-// 说明：niri 与 Hyprland 模型不同——
-//   · niri 是「列」式滚动平铺，窗口属于列，列属于工作区
-//   · 没有 toggle split / scratchpad / 光标缩放，已就近映射或省略
+// 模块加载
+// 顺序即生效顺序（位置相关）：
 // ────────────────────────────────────────────────────────────────────
-binds {
-    // #"系统"
-    Mod+Shift+Slash hotkey-overlay-title="显示快捷键"                            { show-hotkey-overlay; }
-    Mod+Shift+E     hotkey-overlay-title="退出 niri"      repeat=false           { quit; }
-    Ctrl+Alt+Delete hotkey-overlay-title="退出 niri"                             { quit; }
-    Mod+O           hotkey-overlay-title="切换总览"       repeat=false           { toggle-overview; }
-    Mod+Escape      hotkey-overlay-title="切换快捷键抑制" allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
-    Mod+Shift+O     hotkey-overlay-title="关闭显示器"                            { power-off-monitors; }
-    Mod+Shift+P     hotkey-overlay-title="取色器"                                { spawn "hyprpicker" "-a" "-n"; }
-
-    // #"窗口"
-    Mod+Q         hotkey-overlay-title="关闭窗口"           repeat=false  { close-window; }
-    Mod+Alt+Space hotkey-overlay-title="切换浮动"                         { toggle-window-floating; }
-    Mod+Shift+V   hotkey-overlay-title="浮动/平铺焦点切换"                { switch-focus-between-floating-and-tiling; }
-    Mod+D         hotkey-overlay-title="最大化列"                         { maximize-column; }
-    Mod+Shift+D   hotkey-overlay-title="最大化到边缘"                     { maximize-window-to-edges; }
-    Mod+F         hotkey-overlay-title="全屏"                             { fullscreen-window; }
-    F11           hotkey-overlay-title="全屏"                             { fullscreen-window; }
-    Mod+J         hotkey-overlay-title="列标签显示"                       { toggle-column-tabbed-display; }
-
-    // #"焦点"
-    Mod+Left  hotkey-overlay-title="焦点左"      { focus-column-left; }
-    Mod+Right hotkey-overlay-title="焦点右"      { focus-column-right; }
-    Mod+Up    hotkey-overlay-title="焦点上"      { focus-window-up; }
-    Mod+Down  hotkey-overlay-title="焦点下"      { focus-window-down; }
-    Mod+Home  hotkey-overlay-title="最左列"      { focus-column-first; }
-    Mod+End   hotkey-overlay-title="最右列"      { focus-column-last; }
-    Mod+Tab   hotkey-overlay-title="窗口切换器"  { spawn-sh "noctalia msg window-switcher"; }
-    Alt+Tab   hotkey-overlay-title="窗口切换器"  { spawn-sh "noctalia msg window-switcher"; }
-
-    // #"移动窗口"
-    Mod+Shift+Left       hotkey-overlay-title="左移窗口"           { move-column-left; }
-    Mod+Shift+Right      hotkey-overlay-title="右移窗口"           { move-column-right; }
-    Mod+Shift+Up         hotkey-overlay-title="上移窗口"           { move-window-up; }
-    Mod+Shift+Down       hotkey-overlay-title="下移窗口"           { move-window-down; }
-    Mod+Ctrl+Shift+Left  hotkey-overlay-title="移到上一个工作区"   { move-column-to-workspace-up; }
-    Mod+Ctrl+Shift+Right hotkey-overlay-title="移到下一个工作区"   { move-column-to-workspace-down; }
-    Mod+Shift+Home       hotkey-overlay-title="移到第一列"         { move-column-to-first; }
-    Mod+Shift+End        hotkey-overlay-title="移到最后一列"       { move-column-to-last; }
-    Mod+Shift+1          hotkey-overlay-title="移动窗口到工作区 1" { move-column-to-workspace 1; }
-    Mod+Shift+2          hotkey-overlay-title="移动窗口到工作区 2" { move-column-to-workspace 2; }
-    Mod+Shift+3          hotkey-overlay-title="移动窗口到工作区 3" { move-column-to-workspace 3; }
-    Mod+Shift+4          hotkey-overlay-title="移动窗口到工作区 4" { move-column-to-workspace 4; }
-    Mod+Shift+5          hotkey-overlay-title="移动窗口到工作区 5" { move-column-to-workspace 5; }
-    Mod+Shift+6          hotkey-overlay-title="移动窗口到工作区 6" { move-column-to-workspace 6; }
-    Mod+Shift+7          hotkey-overlay-title="移动窗口到工作区 7" { move-column-to-workspace 7; }
-    Mod+Shift+8          hotkey-overlay-title="移动窗口到工作区 8" { move-column-to-workspace 8; }
-    Mod+Shift+9          hotkey-overlay-title="移动窗口到工作区 9" { move-column-to-workspace 9; }
-
-    // #"工作区"
-    Mod+1 hotkey-overlay-title="工作区 1" { focus-workspace 1; }
-    Mod+2 hotkey-overlay-title="工作区 2" { focus-workspace 2; }
-    Mod+3 hotkey-overlay-title="工作区 3" { focus-workspace 3; }
-    Mod+4 hotkey-overlay-title="工作区 4" { focus-workspace 4; }
-    Mod+5 hotkey-overlay-title="工作区 5" { focus-workspace 5; }
-    Mod+6 hotkey-overlay-title="工作区 6" { focus-workspace 6; }
-    Mod+7 hotkey-overlay-title="工作区 7" { focus-workspace 7; }
-    Mod+8 hotkey-overlay-title="工作区 8" { focus-workspace 8; }
-    Mod+9 hotkey-overlay-title="工作区 9" { focus-workspace 9; }
-    Mod+Ctrl+Up               hotkey-overlay-title="上一个工作区"                  { focus-workspace-up; }
-    Mod+Ctrl+Down             hotkey-overlay-title="下一个工作区"                  { focus-workspace-down; }
-    Mod+Page_Up               hotkey-overlay-title="上一个工作区"                  { focus-workspace-up; }
-    Mod+Page_Down             hotkey-overlay-title="下一个工作区"                  { focus-workspace-down; }
-    Mod+WheelScrollUp         hotkey-overlay-title="上一个工作区" cooldown-ms=150  { focus-workspace-up; }
-    Mod+WheelScrollDown       hotkey-overlay-title="下一个工作区" cooldown-ms=150  { focus-workspace-down; }
-    Mod+WheelScrollLeft       hotkey-overlay-title="焦点左"                        { focus-column-left; }
-    Mod+WheelScrollRight      hotkey-overlay-title="焦点右"                        { focus-column-right; }
-    Mod+Ctrl+WheelScrollUp                                        cooldown-ms=150  { move-column-to-workspace-up; }
-    Mod+Ctrl+WheelScrollDown                                      cooldown-ms=150  { move-column-to-workspace-down; }
-    Mod+Shift+WheelScrollUp   hotkey-overlay-title="焦点左"                        { focus-column-left; }
-    Mod+Shift+WheelScrollDown hotkey-overlay-title="焦点右"                        { focus-column-right; }
-
-    // #"列与窗口大小"
-    Mod+R            hotkey-overlay-title="切换预设列宽"      { switch-preset-column-width; }
-    Mod+Shift+R      hotkey-overlay-title="反向切换预设列宽"  { switch-preset-column-width-back; }
-    Mod+Ctrl+Shift+R hotkey-overlay-title="切换预设窗口高"    { switch-preset-window-height; }
-    Mod+Ctrl+R       hotkey-overlay-title="重置窗口高度"      { reset-window-height; }
-    Mod+Minus        hotkey-overlay-title="列宽 -10%"         { set-column-width "-10%"; }
-    Mod+Equal        hotkey-overlay-title="列宽 +10%"         { set-column-width "+10%"; }
-    Mod+Shift+Minus  hotkey-overlay-title="窗口高 -10%"       { set-window-height "-10%"; }
-    Mod+Shift+Equal  hotkey-overlay-title="窗口高 +10%"       { set-window-height "+10%"; }
-    Mod+C            hotkey-overlay-title="居中当前列"        { center-column; }
-    Mod+Shift+C      hotkey-overlay-title="居中可见列"        { center-visible-columns; }
-    Mod+Ctrl+F       hotkey-overlay-title="扩展到可用宽度"    { expand-column-to-available-width; }
-    Mod+BracketLeft  hotkey-overlay-title="与左侧列合并/拆出" { consume-or-expel-window-left; }
-    Mod+BracketRight hotkey-overlay-title="与右侧列合并/拆出" { consume-or-expel-window-right; }
-
-    // #"启动"
-    Mod+Return        hotkey-overlay-title="打开终端"       { spawn "kitty"; }
-    Mod+E             hotkey-overlay-title="打开文件管理器" { spawn-sh "kitty yazi"; }
-    Mod+T             hotkey-overlay-title="打开终端"       { spawn "kitty"; }
-    // Mod+C             hotkey-overlay-title="计算器"         { spawn "gnome-calculator"; }
-    Mod+W             hotkey-overlay-title="浏览器"         { spawn "zen-browser"; }
-    Ctrl+Shift+Escape hotkey-overlay-title="系统监控"       { spawn-sh "kitty -e btop"; }
-
-    // #"Noctalia"
-    Mod+Z       hotkey-overlay-title="设置"         { spawn-sh "noctalia msg settings-toggle"; }
-    Mod+X       hotkey-overlay-title="控制中心"     { spawn-sh "noctalia msg panel-toggle control-center"; }
-    Mod+Space   hotkey-overlay-title="启动器"       { spawn-sh "noctalia msg panel-toggle launcher"; }
-    Mod+Period  hotkey-overlay-title="Emoji 选择器" { spawn-sh "noctalia msg panel-toggle launcher /emo"; }
-    Mod+L       hotkey-overlay-title="锁定屏幕"     { spawn-sh "noctalia msg session lock"; }
-    Mod+Alt+C   hotkey-overlay-title="会话面板"     { spawn-sh "noctalia msg panel-toggle session"; }
-    Mod+K       hotkey-overlay-title="快捷键表"     { spawn-sh "noctalia msg panel-toggle blackbartblues/keymap:panel"; }
-    Mod+Shift+W hotkey-overlay-title="壁纸面板"     { spawn-sh "noctalia msg panel-toggle wallpaper"; }
-    Mod+V       hotkey-overlay-title="剪贴板"       { spawn-sh "noctalia msg panel-toggle clipboard"; }
-    Mod+A       hotkey-overlay-title="通知中心"     { spawn-sh "noctalia msg panel-toggle control-center notifications"; }
-    Print       hotkey-overlay-title="区域截图"     { spawn-sh "noctalia msg screenshot-region"; }
-    Mod+Print   hotkey-overlay-title="全屏截图"     { spawn-sh "noctalia msg screenshot-fullscreen"; }
-
-    // #"硬件"
-    XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "noctalia msg volume-up"; }
-    XF86AudioLowerVolume allow-when-locked=true { spawn-sh "noctalia msg volume-down"; }
-    XF86AudioMute        allow-when-locked=true { spawn-sh "noctalia msg volume-mute"; }
-    XF86AudioMicMute     allow-when-locked=true { spawn-sh "noctalia msg mic-mute"; }
-    XF86AudioPlay        allow-when-locked=true { spawn-sh "noctalia msg media toggle"; }
-    XF86AudioPause       allow-when-locked=true { spawn-sh "noctalia msg media toggle"; }
-    XF86AudioNext        allow-when-locked=true { spawn-sh "noctalia msg media next"; }
-    XF86AudioPrev        allow-when-locked=true { spawn-sh "noctalia msg media previous"; }
-    XF86MonBrightnessUp   allow-when-locked=true { spawn-sh "noctalia msg brightness-up"; }
-    XF86MonBrightnessDown allow-when-locked=true { spawn-sh "noctalia msg brightness-down"; }
-}
+include "core/inputs.kdl"       // 输入设备   ← core/inputs.lua
+include "core/monitors.kdl"     // 显示器     ← core/monitors.lua
+include "core/layout.kdl"       // 布局与外观 ← core/decorations.lua, colors.lua
+include "core/windowrules.kdl"  // 窗口/图层规则 ← core/windowrules.lua
+include "core/environment.kdl"  // 环境变量   ← core/environment.lua
+include "core/autostart.kdl"    // 自启动     ← shells/*/autostart.lua
+include "core/binds.kdl"        // 快捷键     ← keymap.lua

@@ -1,0 +1,10 @@
+// ────────────────────────────────────────────────────────────────────
+// niri 模块：自启动
+// 对应各 shell 的 autostart.lua
+// ────────────────────────────────────────────────────────────────────
+// Noctalia v5 桌面 shell（原生支持 niri，自带 polkit agent）
+spawn-at-startup "noctalia"
+// CachyOS 焦点窗口 cgroup 加速
+spawn-at-startup "niri-focused-booster"
+// 允许 root 访问 XWayland（原 Hyprland autostart）
+spawn-sh-at-startup "sleep 1; xhost +SI:localuser:root"

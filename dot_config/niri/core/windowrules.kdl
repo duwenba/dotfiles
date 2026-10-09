@@ -1,0 +1,54 @@
+// ────────────────────────────────────────────────────────────────────
+// niri 模块：窗口规则与图层规则
+// 对应 Hyprland core/windowrules.lua
+// ────────────────────────────────────────────────────────────────────
+// layer rules
+layer-rule {
+    match layer="top"
+    match layer="overlay"
+
+    background-effect {
+        xray false
+    }
+}
+
+// 全局 2px 圆角，对应 Hyprland decoration:rounding = 2
+window-rule {
+    geometry-corner-radius 2
+    clip-to-geometry true
+}
+window-rule {
+    match is-floating=true
+    background-effect {
+        xray false
+    }
+}
+// 浮动窗口规则
+window-rule {
+    match app-id=r#"^(gnome-calculator|org\.gnome\.Calculator)$"#
+    open-floating true
+    default-column-width { proportion 0.25; }
+}
+window-rule {
+    match app-id=r#"^(firefox|zen)$"# title="^Picture-in-Picture$"
+    open-floating true
+}
+window-rule {
+    match app-id=r#"^(dev\.)?(noctalia\.Noctalia(\.Settings)?)$"#
+    open-floating true
+    default-column-width { proportion 0.70; }
+    default-window-height { proportion 0.70; }
+}
+// 常用工具窗口浮动
+window-rule {
+    match app-id=r#"^(org\.pulseaudio\.pavucontrol|blueman-manager|nm-applet|nm-connection-editor|kvantummanager|qt[56]ct|nwg-look)$"#
+    open-floating true
+}
+//
+window-rule {
+    match app-id=r#"^kitty$"#
+    draw-border-with-background false
+    background-effect {
+        blur true
+    }
+}

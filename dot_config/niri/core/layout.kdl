@@ -1,0 +1,35 @@
+// ────────────────────────────────────────────────────────────────────
+// niri 模块：布局与外观
+// 对应 Hyprland core/decorations.lua + core/colors.lua
+// ────────────────────────────────────────────────────────────────────
+layout {
+    // Hyprland: gaps_in 1 / gaps_out 2；niri 只有单一 gaps，取外间距
+    gaps 2
+    // 切换焦点时不强制居中 ("never" / "on-overflow" / "always")
+    center-focused-column "never"
+    // 工作区只有单个列（如刚打开的新窗口）时始终居中
+    always-center-single-column
+
+    preset-column-widths {
+        proportion 0.33333
+        proportion 0.5
+        proportion 0.66667
+    }
+    // default-column-width { proportion 0.5; }
+
+    // 用 border 还原 Hyprland 的 2px 边框（active 渐变 / inactive 灰）
+    focus-ring { off; }
+    border {
+        // 注意：本段被拆到 include 文件后，必须显式写 on 才会启用边框
+        // （见官方 Include 文档的 Border special case）
+        on
+        width 2
+        // Hyprland: CACHYLGREEN → CACHYDGREEN, 45°，inactive CACHYGRAY
+        active-gradient from="#82dccc" to="#007d6f" angle=45
+        inactive-color "#798bb2"
+        urgent-color "#ff0000"
+    }
+
+    // Hyprland: shadow = false
+    shadow { off; }
+}
