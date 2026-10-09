@@ -27,7 +27,6 @@ window-rule {
 window-rule {
     match app-id=r#"^(gnome-calculator|org\.gnome\.Calculator)$"#
     open-floating true
-    default-column-width { proportion 0.25; }
 }
 window-rule {
     match app-id=r#"^(firefox|zen)$"# title="^Picture-in-Picture$"
@@ -44,11 +43,22 @@ window-rule {
     match app-id=r#"^(org\.pulseaudio\.pavucontrol|blueman-manager|nm-applet|nm-connection-editor|kvantummanager|qt[56]ct|nwg-look)$"#
     open-floating true
 }
+// 浮动窗口约定：任何 app-id 以 "floating" 开头的窗口都浮动（如 floating-terminal）
+window-rule {
+    match app-id=r#"^floating"#
+    open-floating true
+    default-column-width { proportion 0.55; }
+    default-window-height { proportion 0.60; }
+}
 //
 window-rule {
-    match app-id=r#"^kitty$"#
+    match app-id=r#"^(kitty|floating.*|dev\.zed\.Zed)$"#
     draw-border-with-background false
     background-effect {
         blur true
     }
+}
+window-rule {
+    match app-id=r#"helium"#
+    default-column-width { proportion 1.0; }
 }

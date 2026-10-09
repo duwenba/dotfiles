@@ -95,7 +95,7 @@ binds {
     // #"启动"
     Mod+Return        hotkey-overlay-title="打开终端"       { spawn "kitty"; }
     Mod+E             hotkey-overlay-title="打开文件管理器" { spawn-sh "kitty yazi"; }
-    Mod+T             hotkey-overlay-title="打开终端"       { spawn "kitty"; }
+    Mod+T             hotkey-overlay-title="打开浮动终端"   { spawn-sh "kitty --class floating-terminal"; }
     // Mod+C             hotkey-overlay-title="计算器"         { spawn "gnome-calculator"; }
     Mod+W             hotkey-overlay-title="浏览器"         { spawn "zen-browser"; }
     Ctrl+Shift+Escape hotkey-overlay-title="系统监控"       { spawn-sh "kitty -e btop"; }
