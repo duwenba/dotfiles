@@ -16,7 +16,7 @@ layout {
         proportion 0.66667
         proportion 0.75
     }
-    // default-column-width { proportion 0.75; }
+    default-column-width { }
 
     // 用 border 还原 Hyprland 的 2px 边框（active 渐变 / inactive 灰）
     focus-ring { off; }

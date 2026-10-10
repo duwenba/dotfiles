@@ -22,7 +22,7 @@ binds {
     Mod+D         hotkey-overlay-title="最大化列"                         { maximize-column; }
     Mod+Shift+D   hotkey-overlay-title="最大化到边缘"                     { maximize-window-to-edges; }
     Mod+F         hotkey-overlay-title="全屏"                             { fullscreen-window; }
-    F11           hotkey-overlay-title="全屏"                             { fullscreen-window; }
+    F11           hotkey-overlay-title="伪全屏"                             { toggle-windowed-fullscreen; }
     Mod+J         hotkey-overlay-title="列标签显示"                       { toggle-column-tabbed-display; }
 
     // #"焦点"

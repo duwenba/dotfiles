@@ -22,6 +22,9 @@ window-rule {
     background-effect {
         xray false
     }
+    shadow {
+        on
+    }
 }
 // 浮动窗口规则
 window-rule {
