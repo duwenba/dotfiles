@@ -25,6 +25,6 @@ input {
 
     // 焦点跟随鼠标：指针移入窗口/输出即自动聚焦
     // 若不想因聚焦屏幕外的窗口而滚动视图，可改为：
-    //   focus-follows-mouse max-scroll-amount="0%"
-    focus-follows-mouse
+    focus-follows-mouse max-scroll-amount="0%"
+    // focus-follows-mouse
 }

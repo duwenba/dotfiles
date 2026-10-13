@@ -68,14 +68,18 @@ binds {
     Mod+Ctrl+Down             hotkey-overlay-title="下一个工作区"                  { focus-workspace-down; }
     Mod+Page_Up               hotkey-overlay-title="上一个工作区"                  { focus-workspace-up; }
     Mod+Page_Down             hotkey-overlay-title="下一个工作区"                  { focus-workspace-down; }
-    Mod+WheelScrollUp         hotkey-overlay-title="上一个工作区" cooldown-ms=150  { focus-workspace-up; }
-    Mod+WheelScrollDown       hotkey-overlay-title="下一个工作区" cooldown-ms=150  { focus-workspace-down; }
-    Mod+WheelScrollLeft       hotkey-overlay-title="焦点左"                        { focus-column-left; }
-    Mod+WheelScrollRight      hotkey-overlay-title="焦点右"                        { focus-column-right; }
-    Mod+Ctrl+WheelScrollUp                                        cooldown-ms=150  { move-column-to-workspace-up; }
-    Mod+Ctrl+WheelScrollDown                                      cooldown-ms=150  { move-column-to-workspace-down; }
-    Mod+Shift+WheelScrollUp   hotkey-overlay-title="焦点左"                        { focus-column-left; }
-    Mod+Shift+WheelScrollDown hotkey-overlay-title="焦点右"                        { focus-column-right; }
+    // Win+滚轮 = 切换列（焦点）
+    Mod+WheelScrollUp   hotkey-overlay-title="焦点左" cooldown-ms=150  { focus-column-left; }
+    Mod+WheelScrollDown hotkey-overlay-title="焦点右" cooldown-ms=150  { focus-column-right; }
+    // Win+Shift+滚轮 = 移动列
+    Mod+Shift+WheelScrollUp   hotkey-overlay-title="左移列"  { move-column-left; }
+    Mod+Shift+WheelScrollDown hotkey-overlay-title="右移列"  { move-column-right; }
+    // Win+Alt+滚轮 = 移动列到上/下工作区
+    Mod+Alt+WheelScrollUp   hotkey-overlay-title="移到上一个工作区" cooldown-ms=150  { move-column-to-workspace-up; }
+    Mod+Alt+WheelScrollDown hotkey-overlay-title="移到下一个工作区" cooldown-ms=150  { move-column-to-workspace-down; }
+    // Win+Ctrl+滚轮 = 切换工作区
+    Mod+Ctrl+WheelScrollUp   hotkey-overlay-title="上一个工作区" cooldown-ms=150  { focus-workspace-up; }
+    Mod+Ctrl+WheelScrollDown hotkey-overlay-title="下一个工作区" cooldown-ms=150  { focus-workspace-down; }
 
     // #"列与窗口大小"
     Mod+R            hotkey-overlay-title="切换预设列宽"      { switch-preset-column-width; }
