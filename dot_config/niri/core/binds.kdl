@@ -32,7 +32,7 @@ binds {
     Mod+Down  hotkey-overlay-title="焦点下"      { focus-window-down; }
     Mod+Home  hotkey-overlay-title="最左列"      { focus-column-first; }
     Mod+End   hotkey-overlay-title="最右列"      { focus-column-last; }
-    Mod+Tab   hotkey-overlay-title="窗口切换器"  { spawn-sh "noctalia msg window-switcher"; }
+    Mod+Tab   hotkey-overlay-title="打开概览"    repeat=false           { toggle-overview; }
     Alt+Tab   hotkey-overlay-title="窗口切换器"  { spawn-sh "noctalia msg window-switcher"; }
 
     // #"移动窗口"
