@@ -16,6 +16,7 @@ layer-rule {
 window-rule {
     geometry-corner-radius 2
     clip-to-geometry true
+    draw-border-with-background false
 }
 // 拒绝客户端的最大化请求（xdg-toplevel set_maximized = niri 的 maximize-to-edges）
 // 注意：仅拦截窗口「打开时」的初始 configure 请求；客户端在打开后才请求最大化则拦不住
@@ -61,7 +62,6 @@ window-rule {
 //
 window-rule {
     match app-id=r#"^(kitty|floating.*|dev\.zed\.Zed)$"#
-    draw-border-with-background false
     background-effect {
         blur true
     }
@@ -69,4 +69,15 @@ window-rule {
 window-rule {
     match app-id=r#"helium"#
     default-column-width { proportion 1.0; }
+}
+
+// dev.stickies.Stickies
+window-rule {
+    match app-id=r#"dev.stickies.Stickies"#
+    border {
+        off
+    }
+    shadow {
+        off
+    }
 }

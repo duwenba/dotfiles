@@ -143,3 +143,14 @@ hl.window_rule({
 -- noctalia
 hl.layer_rule({ match = { namespace = "^noctalia-bar-default$" }, xray = true })
 hl.layer_rule({ match = { namespace = "^noctalia-dock$" }, xray = false })
+
+-- stickies
+hl.window_rule({
+    match = {
+        class = "^dev.stickies.Stickies$",
+        title = "^Stickies · Note$"
+    },
+    border_size = 0,
+    no_shadow = true,
+    pin = true,
+})
