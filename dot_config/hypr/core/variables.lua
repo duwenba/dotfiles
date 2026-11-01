@@ -22,5 +22,4 @@ NUM_WPM = 5 -- Number of workspaces per monitor (Max 10)
 -- SHELLS
 
 -- 选择启用的 shell（hyprland.lua 根据此全局变量加载对应 profile）
--- SHELL = "noctalia-shell"  -- v4 quickshell（默认）
 SHELL = "noctalia"       -- v5 守护进程

@@ -16,13 +16,9 @@ require("core.workspaces")
 -- 2. 按全局变量 SHELL（core/variables.lua 中定义）加载对应 shell 的 autostart
 require("shells." .. SHELL .. ".autostart")
 
--- 3. keymap：v5 由 Noctalia Keymap 插件托管；v4 为手写适配版
+-- 3. keymap：由 Noctalia Keymap 插件托管
 -- BEGIN Keymap managed include
 -- Noctalia Keymap 插件要求保留字面量 require("keymap")（见 writer_service.luau 的 hasExactLine）
-if SHELL == "noctalia" then
-    require("keymap")
-else
-    require("shells.noctalia-shell.keymap")
-end
+require("keymap")
 -- END Keymap managed include
 
