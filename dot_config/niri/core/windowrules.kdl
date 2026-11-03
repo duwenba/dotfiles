@@ -38,7 +38,7 @@ window-rule {
     open-floating true
 }
 window-rule {
-    match app-id=r#"^(firefox|zen).*$"# title="^(Picture-in-Picture|画中画)$"
+    match app-id=r#"^(firefox|zen|helium).*$"# title="^(Picture-in-Picture|画中画)$"
     open-floating true
 }
 window-rule {
@@ -67,8 +67,8 @@ window-rule {
     }
 }
 window-rule {
-    match app-id=r#"helium"#
-    default-column-width { proportion 1.0; }
+    match app-id=r#"(helium|zen)"#
+    open-maximized true
 }
 
 // dev.stickies.Stickies
@@ -78,6 +78,16 @@ window-rule {
         off
     }
     shadow {
+        off
+    }
+}
+
+// wechat
+window-rule {
+    match app-id=r#"^(wechat)$"#
+
+    open-floating true
+    border {
         off
     }
 }
