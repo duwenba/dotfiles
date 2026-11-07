@@ -65,6 +65,9 @@ window-rule {
     background-effect {
         blur true
     }
+    border {
+        on
+    }
 }
 window-rule {
     match app-id=r#"(helium|zen)"#

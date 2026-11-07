@@ -22,7 +22,7 @@ layout {
     border {
         // 注意：本段被拆到 include 文件后，必须显式写 on 才会启用边框
         // （见官方 Include 文档的 Border special case）
-        on
+        // on
         width 2
         // Hyprland: active 纯色青绿 + 灰色 inactive
         active-color "#40e7c6"
