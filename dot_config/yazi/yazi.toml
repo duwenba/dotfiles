@@ -6,7 +6,7 @@ show_hidden = false
 
 [preview]
 
-warp = "yes"
+wrap = "yes"
 
 [opener]
 edit = [
@@ -23,6 +23,15 @@ markdown = [
 
 chezmoi = [
 	{desc="chezmoi edit", run = 'chezmoi edit %s', block = true, for = "unix"}
+]
+
+# 内置 video 预览器直接把音频（flac/mp3 等）内嵌封面渲染成图片
+[plugin]
+prepend_previewers = [
+	{ mime = "audio/*", run = "video" },
+]
+append_preloaders = [
+	{ mime = "audio/*", run = "video" },
 ]
 
 [open]
